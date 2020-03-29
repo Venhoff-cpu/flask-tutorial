@@ -12,7 +12,7 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 
 # funkcjonalność strony do rejestrowania. Weryfikacja poprawności wpisanych danych oraz czy użtkownik juz nie jest
-# zarejestrowany w bazie db. Jeśli wszytko OK, dodaje żytkownia i hashuje hasło.
+# zarejestrowany w bazie db. Jeśli wszytko OK, dodaje użytkownia i hashuje hasło.
 @bp.route("/register", methods=("GET", "POST"))
 def register():
     if request.method == "POST":
@@ -37,12 +37,15 @@ def register():
             db.commit()
             return redirect(url_for("auth.login"))
 
+        # Wyświetla komunikat błędu, zakładając, że fukcja nie została predefiniowna w kodzie html.
+        # Przykład - Pole username jest wymagane "requiered". Przeglądarka nie pozwoli wykonać akcji submit jeśli nie
+        # wypełnimy pola
         flash(error)
     return render_template("auth/register.html")
 
 
 # Strona logowania, a dokładnie jej funkcjonalność. Weryfikacja użytkoiwnia i hasła. Poprawne dane logują dane sesji
-# z informacjami użytkownika.
+# do przegladarki z informacjami użytkownika.
 @bp.route("/login", methods=("GET", "POST"))
 def login():
     if request.method == 'POST':

@@ -36,4 +36,10 @@ def create_app(test_config=None):
     from . import auth
     app.register_blueprint(auth.bp)
 
+    # Importowanie i rejestracja blueprintu w "fabryce"
+    from . import blog
+    app.register_blueprint(blog.bp)
+    app.add_url_rule('/', endpoint='index') # "blog nie ma zdefiniowanego URL prefiksu, bo będzie zmienny. Dlatego
+                                            # ustawiamy go jako głowny index strony '/'
+
     return app
