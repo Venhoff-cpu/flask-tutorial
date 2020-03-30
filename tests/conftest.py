@@ -41,3 +41,25 @@ def client(app):
 @pytest.fixture
 def runner(app):
     return app.test_cli_runner()
+
+
+# Utworzenie klienta testowego w celu logowania się i weryfikacji systemu autentyfikacji (auth).
+class AuthActions(object):
+    def __init__(self, client):
+        self._client = client
+
+    def login(self, username='test', password='test'):
+        return self._client.post(
+            '/auth/login',
+            data={'username': username, 'password': password}
+        )
+
+    def logout(self):
+        return self._client.get('/auth/logout')
+
+
+# dzięki narzędziu auth, jesteśmy wstanie uzywac w testach funkcji auth.login(), by zalogowac się jako użytkownik
+# testowy
+@pytest.fixture
+def auth(client):
+    return AuthActions(client)
